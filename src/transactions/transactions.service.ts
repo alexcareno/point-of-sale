@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { CouponsService } from '../coupons/coupons.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Transaction, TransactionContent } from './entities/transaction.entity';
 import { Between, FindManyOptions, Repository } from 'typeorm';
@@ -14,13 +14,24 @@ export class TransactionsService {
 		@InjectRepository(Transaction) private readonly transactionRepository: Repository<Transaction>,
 		@InjectRepository(TransactionContent) private readonly transactionContentRepository: Repository<TransactionContent>,
 		@InjectRepository(Product) private readonly ProductRepository: Repository<Product>,
+		private readonly couponService: CouponsService
 	) { }
 
 	async create(createTransactionDto: CreateTransactionDto) {
 
 		await this.ProductRepository.manager.transaction(async (transactionEntityManager) => {
 			const transaction = new Transaction();
-			transaction.total = createTransactionDto.contents.reduce((total, item) => total + (item.price * item.quantity), 0);
+			const total = createTransactionDto.contents.reduce((total, item) => total + (item.price * item.quantity), 0);
+			transaction.total = total;
+
+			if(createTransactionDto.coupon) {
+				const coupon = await this.couponService.applyCoupon(createTransactionDto.coupon);
+				const discount = total * (coupon.data.percentage / 100);
+				transaction.discount = discount;
+				transaction.coupon = coupon.data.name;
+				transaction.total -= discount;
+			}
+
 			for (const contents of createTransactionDto.contents) {
 				const product = await transactionEntityManager.findOneBy(Product, { id: contents.productId });
 

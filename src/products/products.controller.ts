@@ -3,7 +3,7 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { GetProductsQueryDto } from './dto/get-product.dto';
-import { IdValidatorPipe } from 'src/common/pipes/id-validator/id-validator.pipe';
+import { IdValidatorPipe } from '../common/pipes/id-validator/id-validator.pipe';
 
 @Controller('products')
 export class ProductsController {
