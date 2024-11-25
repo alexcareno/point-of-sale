@@ -18,6 +18,6 @@ export class Product {
     @Column({ type: 'int' })
     stock: number;
 
-    @ManyToOne(() => Category, category => category.products)
+    @ManyToOne(() => Category)
     category: Category;
 }
