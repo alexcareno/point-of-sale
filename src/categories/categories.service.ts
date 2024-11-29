@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
 import { FindManyOptions, Repository } from 'typeorm';
 import { products } from '../seeder/data/products';
+import { categories } from '../seeder/data/categories';
 
 @Injectable()
 export class CategoriesService {
