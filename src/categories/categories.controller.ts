@@ -1,44 +1,44 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, BadRequestException, Query} from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { IdValidatorPipe } from '../common/pipes/id-validator/id-validator.pipe';
+import { IdValidationPipe } from '../common/pipes/id-validation/id-validation.pipe';
+
 
 @Controller('categories')
 export class CategoriesController {
+  constructor(
+    private readonly categoriesService: CategoriesService
+  ) {}
 
-	constructor(
-		private readonly categoriesService: CategoriesService
-	) { }
+  @Post()
+  create(@Body() createCategoryDto: CreateCategoryDto) {
+    return this.categoriesService.create(createCategoryDto);
+  }
 
-	@Post()
-	create(@Body() createCategoryDto: CreateCategoryDto) {
-		return this.categoriesService.create(createCategoryDto);
-	}
+  @Get()
+  findAll() {
+    return this.categoriesService.findAll();
+  }
 
-	@Get()
-	findAll() {
-		return this.categoriesService.findAll();
-	}
+  @Get(':id')
+  findOne(
+    @Param('id', IdValidationPipe) id: string, 
+    @Query('products') products?: string
+  ) { 
+    return this.categoriesService.findOne(+id, products);
+  }
 
-	@Get(':id')
-	findOne(
-		@Param('id', IdValidatorPipe) id: string,
-		@Query('products') withProducts?: string
-	) {
-		return this.categoriesService.findOne(+id, withProducts);
-	}
+  @Patch(':id')
+  update(
+    @Param('id', IdValidationPipe) id: string, 
+    @Body() updateCategoryDto: UpdateCategoryDto
+  ) {
+    return this.categoriesService.update(+id, updateCategoryDto);
+  }
 
-	@Patch(':id')
-	update(
-		@Param('id', IdValidatorPipe) id: string,
-		@Body() updateCategoryDto: UpdateCategoryDto
-	) {
-		return this.categoriesService.update(+id, updateCategoryDto);
-	}
-
-	@Delete(':id')
-	remove(@Param('id', IdValidatorPipe) id: string) {
-		return this.categoriesService.remove(+id);
-	}
+  @Delete(':id')
+  remove(@Param('id', IdValidationPipe) id: string) {
+    return this.categoriesService.remove(+id);
+  }
 }

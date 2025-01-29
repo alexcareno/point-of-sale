@@ -1,16 +1,16 @@
-import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { ConfigService } from '@nestjs/config';
-import { join } from 'path';
+import { ConfigService } from '@nestjs/config'
+import type { TypeOrmModuleOptions } from '@nestjs/typeorm'
+import { join } from 'path'
 
-export const typeOrmConfig = (ConfigService: ConfigService): TypeOrmModuleOptions => ({
+export const typeOrmConfig = (configService: ConfigService) : TypeOrmModuleOptions => ({
     type: 'postgres',
-    host: ConfigService.get('DATABASE_HOST'),
-    port: ConfigService.get('DATABASE_PORT'),
-    username: ConfigService.get('DATABASE_USER'),
-    password: ConfigService.get('DATABASE_PASS'),
-    database: ConfigService.get('DATABASE_NAME'),
+    host: configService.get('DATABASE_HOST'),
+    port: configService.get('DATABASE_PORT'),
+    username: configService.get('DATABASE_USER'),
+    password:  configService.get('DATABASE_PASS'),
+    database: configService.get('DATABASE_NAME'),
     ssl: true,
-    logging: true,
-    entities: [join(__dirname + '../../**/*.entity.{ts,js}')],
-    synchronize: true, // set to false in production
-});
+    logging: false,
+    entities: [join(__dirname + '../../**/*.entity.{js,ts}')],
+    synchronize: true
+})

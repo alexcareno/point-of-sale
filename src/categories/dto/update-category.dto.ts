@@ -3,6 +3,6 @@ import { CreateCategoryDto } from './create-category.dto';
 import { IsNotEmpty } from 'class-validator';
 
 export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {
-    @IsNotEmpty({message: 'El nombre de la categoría es requerido'})
-    name: string;
+    @IsNotEmpty({message: 'El Nombre de la Categoría no puede ir vacio'})
+    name: string
 }

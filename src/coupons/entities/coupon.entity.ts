@@ -1,18 +1,16 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-
 @Entity()
 export class Coupon {
-
     @PrimaryGeneratedColumn()
-    id: number;
+    id: number
 
-    @Column({type: 'varchar', length: 30})
-    name: string;
+    @Column({type: 'varchar', length: 30 })
+    name: string
 
     @Column({type: 'int'})
-    percentage: number;
+    percentage: number
 
     @Column({type: 'date'})
-    expirationDate: Date;
+    expirationDate: Date
 }
